@@ -83,6 +83,7 @@ function Dashboard({ handlelogout }) {
     // Generate the labels array starting from 0
     const labels = Array.from({ length: numLabels }, (_, i) => i * increment);
 
+
     const data = {
         labels: voltage,
         datasets: [
@@ -106,23 +107,6 @@ function Dashboard({ handlelogout }) {
             },
         ],
     };
-
-    // const generateChartData = (labels, voltage, current) => {
-    //     return {
-    //         labels: labels,
-    //         datasets: [
-    //             {
-    //                 label: 'Data',
-    //                 data: current,
-    //                 fill: false,
-    //                 borderColor: 'rgba(75, 192, 192, 1)',
-    //                 borderWidth: 2,
-    //             },
-    //         ],
-    //     };
-    // };
-    // const data = generateChartData(labels, voltage, current);
-
 
 
     const options = {
@@ -156,6 +140,7 @@ function Dashboard({ handlelogout }) {
         },
         scales: {
             x: {
+                stepSize: 5,
                 title: {
                     display: true,
                 },
@@ -164,7 +149,7 @@ function Dashboard({ handlelogout }) {
                     font: {
                         weight: 'bold',
                     },
-                    
+                    beginAtZero: true,
                 },
 
             },
