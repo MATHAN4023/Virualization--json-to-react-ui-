@@ -149,6 +149,8 @@ function Dashboard({ handlelogout }) {
                     font: {
                         weight: 'bold',
                     },
+                    
+                    maxTicksLimit: 10,
                     beginAtZero: true,
                 },
 
@@ -166,7 +168,12 @@ function Dashboard({ handlelogout }) {
                     font: {
                         weight: 'bold',
                     },
-                }, stepSize: 2,
+                    setSize: 2,
+                },
+
+                grid: {
+                    display: false, // Hide y-axis grid lines
+                },
             },
             y1: {
                 beginAtZero: true,
