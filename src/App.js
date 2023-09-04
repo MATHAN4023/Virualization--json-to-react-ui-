@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+
 import './App.css';
+import Login from './Login';
+import Dashboard from './Dashboard';
 
 function App() {
+  const [access, setaccess] = useState(sessionStorage.getItem('access') || false);
+
+  const access_provider = () => {
+    setaccess(true)
+  }
+  const handlelogout = () => {
+    sessionStorage.removeItem('access');
+    setaccess(false);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {access ? (
+        <>
+          <Dashboard handlelogout={handlelogout}/>
+        </>
+      ) : (
+        <><Login access_provider={access_provider} /></>
+      )}
     </div>
   );
 }

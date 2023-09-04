@@ -1,38 +1,243 @@
-.App {
-  text-align: center;
+/* login */
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+  justify-content: space-around;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.digital_scan {
   display: flex;
   flex-direction: column;
+  gap: 5px;
+  border: 0.1px solid rgb(199, 194, 194);
+  border-radius: 50px;
+  padding: 2rem;
+  width: 38%;
+  box-shadow: 3px 3px 10px 1px rgba(0, 0, 0, 0.5);
+}
+
+.login_inputs {
+  padding: 1.5rem;
+  width: 30%;
+  justify-content: start;
+  align-items: start;
+  position: relative;
+}
+
+.login_inputs_individual {
+  width: 80%;
+  height: 45px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: 1px solid rgb(69, 68, 68);
+}
+
+.all_inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 1rem;
+  position: relative;
+}
+
+.forget {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  color: rgb(255, 4, 0);
+}
+
+.login_btn {
+  padding: 0.5rem;
+  border-radius: 10px;
+  background-color: rgb(255, 4, 0);
+  color: white;
+  cursor: pointer;
+  min-width: 100px;
+  font-weight: 700;
+  transition: .3s ease all;
+  border: none;
+}
+
+.login_btn_div {
+  width: 100%;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.powered_by {
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.Quantanics {
+  color: red;
+  text-transform: uppercase;
+}
+
+.sketch_images {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sketch1,
+.sketch2 {
+  width: 100%;
+  height: 270px;
+}
+
+.TempoIot {
+  font-weight: 700;
+  font-size: 30px;
+  color: #716f6f;
+}
+
+.ds {
+  font-size: 30px;
+  color: red;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+/* dashboard */
+.boddy {
+  background-color: #313030;
+  min-height: 100vh;
+  padding: 0%;
+  margin: 0%;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: end;
+}
+
+.heading {
+  font-size: 3rem;
+  font-weight: 700;
+  color: rgb(38, 38, 186);
+  margin-left: 60px;
+}
+
+.btn-loc {
+  cursor: pointer;
+  color: white;
+  letter-spacing: 1px;
+  text-align: center;
+  font-weight: 600;
+  user-select: none;
+  padding: 0.2rem 0.8rem 0.2rem 0.8rem;
+  font-size: var(--FONT_SIZE);
+  border: none;
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+  margin-right: 20px;
+  width: 110px;
+  height: 40px;
+}
+
+.logout {
+  background-color: red;
+}
+
+.sec-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.start {
+  background-color: green;
+}
+.stop{
+  background-color: red;
+}
+
+/* graph content */
+.content {
+  display: flex;
+  justify-content: space-around;
+}
+
+.graph {
+  height: 65vh;
+  width: 55%;
+  background-color: #706d6d;
+  z-index: 3;
+  border-radius: 5px;
+}
+
+.values {
+  color: white;
+  font-size: larger;
+}
+
+.data-table {
+  border: none;
+  width: 100%;
+}
+
+.data-table td {
+  padding: 2px;
+  padding-left: 15px;
+}
+
+.datas {
+  width: 10rem;
+  font-weight: bold;
+}
+
+.value {
+  background-color: black;
+  border-radius: 10px;
+  color: green;
+  width: 5rem;
+  height: 3rem;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.symbols {
+  height: 3rem;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.display-flex{
+  display: flex;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.loader {
+  width: 100%;
+  height: 100%;
+  z-index:5;
+  position: absolute;
+  display: none;
+  background-color: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+}
+.loading {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -1,0 +1,102 @@
+[
+    {
+        "Time": 10,
+        "Voltage":24,
+        "Current":5
+    },
+    {
+        "Time": 10,
+        "Voltage":25,
+        "Current":5.2
+    },
+    {
+        "Time": 10,
+        "Voltage":25,
+        "Current":5.5
+    },
+    {
+        "Time": 10,
+        "Voltage":26,
+        "Current":5.7
+    },
+    {
+        "Time": 10,
+        "Voltage":26,
+        "Current":6
+    },
+    {
+        "Time": 10,
+        "Voltage":27,
+        "Current":6.2
+    },
+    {
+        "Time": 10,
+        "Voltage":0,
+        "Current":6.5
+    },
+    {
+        "Time": 10,
+        "Voltage":28,
+        "Current":6.8
+    },
+    {
+        "Time": 10,
+        "Voltage":29,
+        "Current":7
+    },
+    {
+        "Time": 10,
+        "Voltage":29,
+        "Current":7.3
+    },
+    {
+        "Time": 10,
+        "Voltage":30,
+        "Current":7.5
+    },
+    {
+        "Time": 10,
+        "Voltage":30,
+        "Current":0
+    },
+    {
+        "Time": 10,
+        "Voltage":31,
+        "Current":8
+    },
+    {
+        "Time": 10,
+        "Voltage":31,
+        "Current":8.2
+    },
+    {
+        "Time": 10,
+        "Voltage":32,
+        "Current":8.5
+    },
+    {
+        "Time": 10,
+        "Voltage":32,
+        "Current":8.8
+    },
+    {
+        "Time": 10,
+        "Voltage":33,
+        "Current":9
+    },
+    {
+        "Time": 10,
+        "Voltage":33,
+        "Current":9.2
+    },
+    {
+        "Time": 10,
+        "Voltage":34,
+        "Current":9.5
+    },
+    {
+        "Time": 10,
+        "Voltage":35,
+        "Current":10
+    }
+]
