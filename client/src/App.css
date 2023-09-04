@@ -109,7 +109,7 @@
 
 /* dashboard */
 .boddy {
-  background-color: #313030;
+  background-color: #ffffff;
   min-height: 100vh;
   padding: 0%;
   margin: 0%;
@@ -119,6 +119,7 @@
   display: flex;
   justify-content: end;
 }
+
 
 .heading {
   font-size: 3rem;
@@ -188,11 +189,13 @@
 .data-table td {
   padding: 2px;
   padding-left: 15px;
+  color: black;
 }
 
 .datas {
   width: 10rem;
   font-weight: bold;
+  color: black;
 }
 
 .value {

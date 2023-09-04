@@ -1,55 +1,108 @@
-import React,{useState} from "react";
-import sketch1 from './logo/sketch1.jpeg';
-import sketch2 from './logo/sketch2.jpeg';
-import Qr_code from './logo/Qr.png';
+import React, { useState } from "react";
+import { createRoot } from "react-dom"; // Import createRoot
+import './index.css'; // Import any necessary CSS files
 import credentials from './login_credential.json';
 
-function Login({access_provider}) {
-    const [username,setusername]=useState();
-    const [password,setpassword]=useState();
+function Login({ access_provider }) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
-    const validate_login=async()=>{
-        const check_username=credentials.username;
-        const check_password =credentials.password;
-        if(check_username===username && check_password===password){
-            access_provider()
-            sessionStorage.setItem('access',true);
-        } else{
-            alert("invalid credentials")
+    const validate_login = async () => {
+        const check_username = credentials.username;
+        const check_password = credentials.password;
+        if (check_username === username && check_password === password) {
+            access_provider();
+            sessionStorage.setItem('access', true);
+        } else {
+            alert("Invalid credentials");
         }
     }
-    
+
     return (
-        <>
-            <div className='content'>
-                <div className='digital_scan'>
-                    <div className="TempoIot">Power Monitoring</div>
-                    <div className="ds">digital Simplified</div>
-                    <img src={Qr_code} style={{ height: '100px', width: '100px' }} alt="Qr" />
-                    <div className="para">It's beginning of machines taking over the world</div>
-                    <div className="powered_by">
-                        Powered by <span className="Quantanics">Quantanics</span>
-                    </div>
+        < >
+            {/* ... rest of your component */}
+            < div id="loginform" >
+                <FormHeader title="Login" />
+                <div>
+                    <FormInput
+                        description="Username"
+                        placeholder="Enter your username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        type="text"
+                    />
+                    <FormInput
+                        description="Password"
+                        placeholder="Enter your password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <FormButton
+                        title="Log in"
+                        type="submit"
+                        className='login_btn'
+                        onClick={validate_login} // Remove the parentheses
+                    />
+
                 </div>
-                <div className='login_inputs'>
-                    <div className="all_inputs">
-                        <div className="logo">
-                            {/* <img src={Logo} alt="Logo" /> */}
-                        </div>
-                        <input type="text" placeholder='Username' className='login_inputs_individual' value={username} onChange={e=>{setusername(e.target.value)}} />
-                        <input type="password" placeholder='Password' className='login_inputs_individual' value={password} onChange={e=>{setpassword(e.target.value)}} />
-                        <div className="login_btn_div">
-                            <input type="submit" className='login_btn' value={"Login"} onClick={validate_login} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className='sketch_images'>
-                <img src={sketch1} alt="sketch1" className='sketch1' />
-                <img src={sketch2} alt="sketch2" className='sketch2' />
-            </div>
+                {/* <OtherMethods /> */}
+
+
+            </div >
         </>
-    )
+    );
 }
 
-export default Login;
+// // ... rest of your component
+
+const FormHeader = (props) => (
+    <h2 id="headerTitle">{props.title}</h2>
+);
+
+const FormButton = (props) => (
+    <div id="button" className="row">
+        <button onClick={props.onClick}>{props.title}</button>
+    </div>
+);
+
+
+const FormInput = (props) => (
+    <div className="row">
+        <label>{props.description}</label>
+        <input
+            type={props.type}
+            placeholder={props.placeholder}
+            value={props.value}
+            onChange={props.onChange}
+        />
+    </div>
+);
+
+// const OtherMethods = (props) => (
+//     <div id="alternativeLogin">
+//         <label>Or sign in with:</label>
+//         <div id="iconGroup">
+//             <Facebook />
+//             <Twitter />
+//             <Google />
+//         </div>
+//     </div>
+// );
+
+// const Facebook = (props) => (
+//     <a href="#" id="facebookIcon"></a>
+// );
+
+// const Twitter = (props) => (
+//     <a href="#" id="twitterIcon"></a>
+// );
+
+// const Google = (props) => (
+//     <a href="#" id="googleIcon"></a>
+// );
+
+
+// const root = createRoot(document.getElementById('root')); // Use createRoot
+// root.render(<Login />);
+export default Login; 

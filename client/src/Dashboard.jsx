@@ -195,7 +195,7 @@ const data = {
                 <button className=" btn-loc logout" onClick={handlelogout}> Logout</button>
             </div>
             <div className="sec-bar">
-                <div className="heading">Solar Module Analyzer...</div>
+                <div className="heading"></div>
                 <button className="btn-loc start" onClick={sendresponse}>Start</button>
             </div>
             <div className="content">
@@ -284,16 +284,6 @@ const data = {
                                     <div className="display-flex">
                                         <div className="value">{ff}</div>
                                         <div className="symbols"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">Power</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value"> {power.slice(0,2)}</div>
-                                        <div className="symbols">W</div>
                                     </div>
                                 </td>
                             </tr>
