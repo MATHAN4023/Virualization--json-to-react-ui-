@@ -5,6 +5,7 @@ import { Chart as ChartJS } from "chart.js/auto";
 import jsonData from './datas/new_data.json';
 import { useState, useEffect } from 'react';
 import { io } from "socket.io-client";
+import 'chartjs-plugin-annotation';
 
 function Dashboard({ handlelogout }) {
     const socket = io('http://localhost:5000/');
@@ -22,19 +23,20 @@ function Dashboard({ handlelogout }) {
     const [ocv, setocv] = useState();
     const [scc, setscc] = useState();
     const [seconds, setSeconds] = useState(0);
-    
+
     const [command, setcommand] = useState(true)
+    const chartRef = useRef(null);
 
     const booleanseconds = useRef(false)
 
     const current = jsonData.map(item => item.Current);
     const voltage = jsonData.map(item => item.Voltage);
-    const power = jsonData.map(item => item.Voltage * item.Current);
+    const power1 = jsonData.map(item => item.Power);
 
     const calculatevalues = () => {
-        const powermax = Math.max(...power)
+        const powermax = Math.max(...power1)
         setpmax(powermax);
-        const indexOfMaxValue = power.indexOf(powermax);
+        const indexOfMaxValue = power1.indexOf(powermax);
         setvmaxp(voltage[indexOfMaxValue])
         setimaxp(current[indexOfMaxValue])
         const indexOfMinVoltage = voltage.indexOf(Math.min(...voltage));
@@ -71,48 +73,57 @@ function Dashboard({ handlelogout }) {
         };
     }, []);
 
-    
-// Define the increment value
-const increment = 5;
 
-// Calculate the number of labels based on data length and increment
-const numLabels = Math.ceil(voltage.length / increment);
+    // Define the increment value
+    const increment = 5;
 
-// Generate the labels array starting from 0
-const labels = Array.from({ length: numLabels }, (_, i) => i * increment);
+    // Calculate the number of labels based on data length and increment
+    const numLabels = Math.ceil(voltage.length / increment);
 
-const data = {
-    labels: labels, // Custom x-axis labels starting from 0 with increments of 5
-    datasets: [
-        {
-            label: 'Current',
-            data: current,
-            fill: false,
-            borderColor: 'yellow',
-            pointRadius: 2,
-            tension: 0.4,
-        },
-        {
-            label: 'Power',
-            data: power,
-            fill: false,
-            borderColor: 'red',
-            pointRadius: 2,
-            tension: 0.4,
-        },
-        {
-            label: 'voltage',
-            data: voltage,
-            fill: false,
-            borderColor: 'green',
-            pointRadius: 2,
-            tension: 0.4,
-        }
-    ],
-};
+    // Generate the labels array starting from 0
+    const labels = Array.from({ length: numLabels }, (_, i) => i * increment);
+
+    const data = {
+        labels: voltage,
+        datasets: [
+            {
+                label: 'Current',
+                data: current,
+                fill: false,
+                yAxisID: 'y',
+                borderColor: 'yellow',
+                pointRadius: 2,
+                tension: 0.4,
+            },
+            {
+                label: 'Power',
+                data: power1,
+                fill: false,
+                yAxisID: 'y1',
+                borderColor: 'red',
+                pointRadius: 2,
+                tension: 0.4,
+            },
+        ],
+    };
+
+    // const generateChartData = (labels, voltage, current) => {
+    //     return {
+    //         labels: labels,
+    //         datasets: [
+    //             {
+    //                 label: 'Data',
+    //                 data: current,
+    //                 fill: false,
+    //                 borderColor: 'rgba(75, 192, 192, 1)',
+    //                 borderWidth: 2,
+    //             },
+    //         ],
+    //     };
+    // };
+    // const data = generateChartData(labels, voltage, current);
 
 
-    
 
     const options = {
         plugins: {
@@ -144,19 +155,42 @@ const data = {
 
         },
         scales: {
-            y: {
-                beginAtZero: true,
+            x: {
+                title: {
+                    display: true,
+                },
                 ticks: {
-                    stepSize: 10,
                     color: 'black',
                     font: {
                         weight: 'bold',
                     },
-                }
+                    
+                },
+
             },
-            x: {
+            y: {
                 beginAtZero: true,
-                display: true,
+                position: 'left',
+
+                title: {
+                    display: true,
+                    text: 'Left Scale',
+                },
+                ticks: {
+                    color: 'black',
+                    font: {
+                        weight: 'bold',
+                    },
+                }, stepSize: 2,
+            },
+            y1: {
+                beginAtZero: true,
+                position: 'right',
+                stepSize: 20,
+                title: {
+                    display: true,
+                    text: 'Right Scale',
+                },
                 ticks: {
                     color: 'black',
                     font: {
@@ -164,6 +198,10 @@ const data = {
                     },
                 },
             },
+        },
+        grid: {
+            display: true,
+            borderWidth: 1,
         },
     };
 
@@ -186,6 +224,7 @@ const data = {
 
 
 
+
     return (
         <div className="boddy" >
             <div id="loader" className="loader">
@@ -200,7 +239,7 @@ const data = {
             </div>
             <div className="content">
                 <div className="graph">
-                    <Line data={data} options={options} />
+                    <Line data={data} options={options} ref={chartRef} />
                     <span className="display-flex" style={{ justifyContent: "center", alignItems: "center", fontWeight: "bold" }}>voltage</span>
                 </div>
                 <div className="values">
@@ -287,16 +326,7 @@ const data = {
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td className="datas">Power</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value"> {power.slice(0,2)}</div>
-                                        <div className="symbols">W</div>
-                                    </div>
-                                </td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>
