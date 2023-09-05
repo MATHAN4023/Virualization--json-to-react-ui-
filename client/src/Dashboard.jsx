@@ -5,6 +5,7 @@ import { Chart as ChartJS } from "chart.js/auto";
 import jsonData from './datas/new_data2.json';
 import myImage from './logo/background.png';
 import { useState, useEffect } from 'react';
+import Papa from 'papaparse';
 import { io } from "socket.io-client";
 import 'chartjs-plugin-annotation';
 import 'font-awesome/css/font-awesome.min.css';
@@ -67,8 +68,18 @@ function Dashboard({ handlelogout }) {
         socket.emit('send-message-react', true)
     }
 
+    //export function
     const exportData = () => {
-        alert("exported successfully");
+        const filename='SolarAnalyser.csv';
+        const csv = Papa.unparse(jsonData);
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
 
@@ -88,9 +99,6 @@ function Dashboard({ handlelogout }) {
             socket.off('message-to-react');
         };
     }, []);
-
-
-    const labels = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
 
 
@@ -327,7 +335,7 @@ function Dashboard({ handlelogout }) {
 
                 <div className="content">
                     <div className="graph">
-                        <Line data={data} options={options}  />
+                        <Line data={data} options={options} />
                     </div>
                 </div>
                 <div className="buttons1">
