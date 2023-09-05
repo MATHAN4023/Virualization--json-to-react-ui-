@@ -99,7 +99,7 @@ function Dashboard({ handlelogout }) {
         datasets: [
             {
                 label: 'Current',
-                data:  current,
+                data: current,
                 fill: false,
                 yAxisID: 'y',
                 borderColor: 'yellow',
@@ -151,21 +151,21 @@ function Dashboard({ handlelogout }) {
         scales: {
             x: {
 
-                type:"linear",
-                position:"bottom",
+                type: "linear",
+                position: "bottom",
 
                 title: {
                     display: true,
-                    text:"Voltage(V)",
+                    text: "Voltage(V)",
                     color: 'black',
                     font: {
                         weight: '900',
-                        size:"15px"
+                        size: "15px"
                     },
                 },
                 ticks: {
 
-                    stepSize:5,
+                    stepSize: 5,
 
                     color: 'black',
                     font: {
@@ -183,11 +183,11 @@ function Dashboard({ handlelogout }) {
                     color: 'black',
                     font: {
                         weight: '900',
-                        size:"15px"
+                        size: "15px"
                     },
                 },
                 ticks: {
-                    stepSize:1,
+                    stepSize: 1,
                     color: 'black',
                     font: {
                         weight: 'bold',
@@ -195,7 +195,7 @@ function Dashboard({ handlelogout }) {
                 },
 
                 grid: {
-                    display:true, 
+                    display: true,
                 },
             },
             y1: {
@@ -207,11 +207,11 @@ function Dashboard({ handlelogout }) {
                     color: 'black',
                     font: {
                         weight: '900',
-                        size:"15px"
+                        size: "15px"
                     },
                 },
                 ticks: {
-                    stepSize:10,
+                    stepSize: 10,
                     color: 'black',
                     font: {
                         weight: 'bold',
@@ -265,6 +265,7 @@ function Dashboard({ handlelogout }) {
                 <div className="nav-bar">
                     <ul>
                         <li
+                            style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 0 ? 'active' : ''}`}
                             onClick={() => handleListItemClick(0)}
                         >
@@ -272,6 +273,7 @@ function Dashboard({ handlelogout }) {
                             <span className="content">Home</span>
                         </li>
                         <li
+                            style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 1 ? 'active' : ''}`}
                             onClick={() => handleListItemClick(1)}
                         >
@@ -279,6 +281,7 @@ function Dashboard({ handlelogout }) {
                             <span className="content">Graph</span>
                         </li>
                         <li
+                            style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 2 ? 'active' : ''}`}
                             onClick={() => handleListItemClick(2)}
                         >
@@ -286,11 +289,12 @@ function Dashboard({ handlelogout }) {
                             <span className="content">Calculation</span>
                         </li>
                         <li
+                            style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 3 ? 'active' : ''}`}
-                            onClick={() => handleListItemClick(3)}
+                            onClick={handlelogout}
                         >
                             <span className="icons"><i className="fa fa-sign-out"></i></span>
-                            <span className="content" onClick={handlelogout}>Logout</span>
+                            <span className="content" >Logout</span>
                         </li>
                     </ul>
 
@@ -323,8 +327,7 @@ function Dashboard({ handlelogout }) {
 
                 <div className="content">
                     <div className="graph">
-                        <Line data={data} options={options} ref={chartRef} />
-                        <span className="display-flex" style={{ justifyContent: "center", alignItems: "center", fontWeight: "bold" }}>voltage</span>
+                        <Line data={data} options={options}  />
                     </div>
                 </div>
                 <div className="buttons1">
@@ -344,45 +347,65 @@ function Dashboard({ handlelogout }) {
 
                 <div className="content">
                     <div className="values">
-
                         <div className="card clue">
                             <h2>OCV</h2>
-                            <div className="value">{ocv}</div>
-                            <div className="symbols">V</div>
+                            <div className="inner-card">
+                                <div className="value">{ocv}</div>
+                                <div className="symbols">V</div>
+                            </div>
                         </div>
                         <div className="card clue">
                             <h2>SCC</h2>
-                            <div className="value">{scc}</div>
-                            <div className="symbols">V</div>
+                            <div className="inner-card">
+                                <div className="value">{scc}</div>
+                                <div className="symbols">V</div>
+                            </div>
                         </div>
                         <div className="card clue">
                             <h2>Ishort</h2>
-                            <div className="value">733.0</div>
-                            <div className="symbols">mA</div>
+                            <div className="inner-card">
+                                <div className="value">733.0</div>
+                                <div className="symbols">mA</div>
+                            </div>
                         </div>
                         <div className="card clue">
                             <h2>Pmax</h2>
-                            <div className="value">{pmax}</div>
-                            <div className="symbols">W</div>
+                            <div className="inner-card">
+                                <div className="value">{pmax}</div>
+                                <div className="symbols">W</div>
+                            </div>
                         </div>
                         <div className="card clue">
                             <h2>Vmaxp</h2>
-                            <div className="value">{vmaxp}</div>
-                            <div className="symbols">V</div>
+                            <div className="inner-card">
+                                <div className="value">{vmaxp}</div>
+                                <div className="symbols">V</div>
+                            </div>
+
                         </div>
                         <div className="card clue">
                             <h2>Imaxp</h2>
-                            <div className="value">{imaxp}</div>
-                            <div className="symbols">mA</div>
+                            <div className="inner-card">
+                                <div className="value">{imaxp}</div>
+                                <div className="symbols">mA</div>
+                            </div>
+
                         </div>
                         <div className="card clue">
                             <h2>EFF</h2>
-                            <div className="value">0.078</div>
-                            <div className="symbols">%</div>
+                            <div className="inner-card">
+                                <div className="inner-card">
+                                    <div className="value">0.078</div>
+                                    <div className="symbols">%</div>
+                                </div>
+                            </div>
+
                         </div>
                         <div className="card clue">
                             <h2>FF</h2>
-                            <div className="value">{ff}</div>
+                            <div className="inner-card">
+                                <div className="value">{ff}</div>
+                            </div>
                         </div>
                     </div>
                 </div>

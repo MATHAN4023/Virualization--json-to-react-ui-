@@ -319,12 +319,13 @@ ul {
   justify-content: space-between;
   width: 50%;
   width: 100%;
-  padding: 2rem;
+  padding: 1rem;
+  gap: 2rem;
 }
 
 .symbols {
-  font-size: 1em;
-  color: #888;
+  font-size: 1.2em;
+  color: #060606;
 }
 footer {
   background-color: #333;
@@ -336,4 +337,10 @@ footer {
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
+}
+.inner-card{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 0.5rem;
 }
