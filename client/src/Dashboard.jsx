@@ -2,13 +2,24 @@ import React, { useRef } from "react";
 import { Line } from 'react-chartjs-2';
 import { Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from "chart.js/auto";
-import jsonData from './datas/new_data.json';
+import jsonData from './datas/new_data2.json';
+import myImage from './logo/background.png';
 import { useState, useEffect } from 'react';
 import { io } from "socket.io-client";
 import 'chartjs-plugin-annotation';
+import 'font-awesome/css/font-awesome.min.css';
+
 
 function Dashboard({ handlelogout }) {
     const socket = io('http://localhost:5000/');
+
+    // State to track the active list item
+    const [activeListItem, setActiveListItem] = useState(null);
+
+    // Function to handle list item click
+    const handleListItemClick = (index) => {
+        setActiveListItem(index);
+    }
 
     // state
     const [vnow, setvnow] = useState();
@@ -55,6 +66,11 @@ function Dashboard({ handlelogout }) {
 
         socket.emit('send-message-react', true)
     }
+
+    const exportData = () => {
+        alert("exported successfully");
+    }
+
 
     const receiveresponse = async () => {
         const loader = document.getElementById("loader");
@@ -134,8 +150,10 @@ function Dashboard({ handlelogout }) {
         },
         scales: {
             x: {
+
                 type:"linear",
                 position:"bottom",
+
                 title: {
                     display: true,
                     text:"Voltage(V)",
@@ -146,7 +164,9 @@ function Dashboard({ handlelogout }) {
                     },
                 },
                 ticks: {
+
                     stepSize:5,
+
                     color: 'black',
                     font: {
                         weight: 'bold',
@@ -227,111 +247,156 @@ function Dashboard({ handlelogout }) {
 
     return (
         <div className="boddy" >
-            <div id="loader" className="loader">
-                <button className="btn-loc stop" style={{ width: "fit-content" }} onClick={receiveresponse}>{seconds} sec - Stop</button>
-            </div>
-            <div className="top-bar">
-                <button className=" btn-loc logout" onClick={handlelogout}> Logout</button>
-            </div>
-            <div className="sec-bar">
-                <div className="heading"></div>
-                <button className="btn-loc start" onClick={sendresponse}>Start</button>
-            </div>
-            <div className="content">
-                <div className="graph">
-                    <Line data={data} options={options} ref={chartRef} />
-                </div>
-                <div className="values">
-                    <table className="data-table">
-                        <tbody>
-                            <tr>
-                                <td className="datas">OCV</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value"> {ocv}</div>
-                                        <div className="symbols">V</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">SCC</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value">{scc}</div>
-                                        <div className="symbols">V</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">Ishort</td>
-                                <td>:</td>
-                                <td>
-                                    <div className="display-flex">
-                                        <div className="value">733.0</div>
-                                        <div className="symbols">mA</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">Pmax</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value">{pmax}</div>
-                                        <div className="symbols">W</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">Vmaxp</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value"> {vmaxp}</div>
-                                        <div className="symbols">V</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">Imaxp</td>
-                                <td>:</td>
-                                <td>
-                                    <div className="display-flex">
-                                        <div className="value">{imaxp}</div>
-                                        <div className="symbols">mA</div>
-                                    </div>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">EFF</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value">0.078</div>
-                                        <div className="symbols">%</div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="datas">FF</td>
-                                <td>:</td>
-                                <td >
-                                    <div className="display-flex">
-                                        <div className="value">{ff}</div>
-                                        <div className="symbols"></div>
-                                    </div>
-                                </td>
-                            </tr>
+            <div className="heading_1">
+                <h5>Welcome To</h5>
+            </div>
+            <div className="heading_2">
+                <h1>Solar Module Analyser</h1>
+            </div>
 
-                        </tbody>
-                    </table>
+            <div className="backimage">
+                <img src={myImage} alt="My Image" />
+            </div>
+
+
+
+            <div className="width-100">
+                <div className="nav-bar">
+                    <ul>
+                        <li
+                            className={`list ${activeListItem === 0 ? 'active' : ''}`}
+                            onClick={() => handleListItemClick(0)}
+                        >
+                            <span className="icons"><i className="fa fa-home"></i></span>
+                            <span className="content">Home</span>
+                        </li>
+                        <li
+                            className={`list ${activeListItem === 1 ? 'active' : ''}`}
+                            onClick={() => handleListItemClick(1)}
+                        >
+                            <span className="icons"><i className="fa fa-line-chart"></i></span>
+                            <span className="content">Graph</span>
+                        </li>
+                        <li
+                            className={`list ${activeListItem === 2 ? 'active' : ''}`}
+                            onClick={() => handleListItemClick(2)}
+                        >
+                            <span className="icons"><i className="fa fa-calculator"></i></span>
+                            <span className="content">Calculation</span>
+                        </li>
+                        <li
+                            className={`list ${activeListItem === 3 ? 'active' : ''}`}
+                            onClick={() => handleListItemClick(3)}
+                        >
+                            <span className="icons"><i className="fa fa-sign-out"></i></span>
+                            <span className="content" onClick={handlelogout}>Logout</span>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
+
+
+
+
+            <div class="card">
+                <div class="container">
+                    <h1 className="text_card">About Us</h1>
+                    <br /><br />
+                    <p class="para">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Our Solar Module Analyzer project is pivotal for efficient solar energy utilization. We collect real-time data from solar panels and graphically display power and current trends. These graphs offer clear insights into panel performance over time, aiding in performance evaluation and anomaly detection. Moreover, our project includes complex calculations to assess efficiency and predict maintenance needs. This comprehensive tool empowers us to optimize energy production and ensure the sustainability of our solar systems."
+                    </p>
+                </div>
+            </div>
+
+            <br /><br /><br /><br /><br />
+
+            <div className="graphs" id="graph">
+
+                <h1 className="text_card">Graph</h1>
+
+                <div id="loader" className="loader">
+                    <button className="btn-loc stop" style={{ width: "fit-content" }} onClick={receiveresponse}>{seconds} sec - Stop</button>
+                </div>
+
+
+                <div className="content">
+                    <div className="graph">
+                        <Line data={data} options={options} ref={chartRef} />
+                        <span className="display-flex" style={{ justifyContent: "center", alignItems: "center", fontWeight: "bold" }}>voltage</span>
+                    </div>
+                </div>
+                <div className="buttons1">
+                    <div className="sec-bar">
+                        <button className="btn-loc start" onClick={sendresponse}>Start</button>
+                    </div>
+                    <div className="sec-bar">
+                        <button className="btn btn-primary" onClick={exportData}>Export</button>
+                    </div>
+                </div>
+            </div>
+
+            <br /><br /><br /><br /><br /><br />
+
+            <div className="Calculation" id="Calculation">
+                <h1 className="text_card">Calculation</h1>
+
+                <div className="content">
+                    <div className="values">
+
+                        <div className="card clue">
+                            <h2>OCV</h2>
+                            <div className="value">{ocv}</div>
+                            <div className="symbols">V</div>
+                        </div>
+                        <div className="card clue">
+                            <h2>SCC</h2>
+                            <div className="value">{scc}</div>
+                            <div className="symbols">V</div>
+                        </div>
+                        <div className="card clue">
+                            <h2>Ishort</h2>
+                            <div className="value">733.0</div>
+                            <div className="symbols">mA</div>
+                        </div>
+                        <div className="card clue">
+                            <h2>Pmax</h2>
+                            <div className="value">{pmax}</div>
+                            <div className="symbols">W</div>
+                        </div>
+                        <div className="card clue">
+                            <h2>Vmaxp</h2>
+                            <div className="value">{vmaxp}</div>
+                            <div className="symbols">V</div>
+                        </div>
+                        <div className="card clue">
+                            <h2>Imaxp</h2>
+                            <div className="value">{imaxp}</div>
+                            <div className="symbols">mA</div>
+                        </div>
+                        <div className="card clue">
+                            <h2>EFF</h2>
+                            <div className="value">0.078</div>
+                            <div className="symbols">%</div>
+                        </div>
+                        <div className="card clue">
+                            <h2>FF</h2>
+                            <div className="value">{ff}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div >
+
+            <footer>
+                <div className="footer-content">
+                    <p>&copy; 2023 Quantanic Techsherv Pvt Ltd. All rights reserved.</p>
+                </div>
+            </footer>
         </div >
     )
 }
+
 
 export default Dashboard;
