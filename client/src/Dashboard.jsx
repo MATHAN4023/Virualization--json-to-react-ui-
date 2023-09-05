@@ -138,7 +138,7 @@ function Dashboard({ handlelogout }) {
                 position:"bottom",
                 title: {
                     display: true,
-                    text:"voltage",
+                    text:"Voltage(V)",
                     color: 'black',
                     font: {
                         weight: '900',
@@ -159,7 +159,7 @@ function Dashboard({ handlelogout }) {
                 position: 'left',
                 title: {
                     display: true,
-                    text: 'Current',
+                    text: 'Current(I)',
                     color: 'black',
                     font: {
                         weight: '900',
@@ -172,11 +172,10 @@ function Dashboard({ handlelogout }) {
                     font: {
                         weight: 'bold',
                     },
-                    setSize: 2,
                 },
 
                 grid: {
-                    display: false, 
+                    display:true, 
                 },
             },
             y1: {
@@ -184,7 +183,7 @@ function Dashboard({ handlelogout }) {
                 position: 'right',
                 title: {
                     display: true,
-                    text: 'Power',
+                    text: 'Power(P)',
                     color: 'black',
                     font: {
                         weight: '900',
