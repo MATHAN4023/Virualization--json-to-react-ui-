@@ -176,7 +176,9 @@
   border-radius: 5px;
 }
 
-
+a{
+  text-decoration: none;
+}
 
 .data-table {
   border: none;

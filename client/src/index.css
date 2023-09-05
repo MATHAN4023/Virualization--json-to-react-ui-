@@ -194,6 +194,7 @@ html {
   border-radius: 50px;
   padding: 1rem;
   align-items: center;
+  text-decoration: none;
 }
 
 .container {
@@ -226,6 +227,7 @@ ul {
 
 .list {
   width: 100px;
+  text-decoration: none;
 }
 
 .nav-bar ul .list:hover .icons i {
@@ -259,6 +261,9 @@ ul {
   align-items: center;
   display: flex;
   justify-content: center;
+}
+.nav-bar ul .list a{
+  text-decoration: none;
 }
 
 .nav-bar ul .list .icons i {

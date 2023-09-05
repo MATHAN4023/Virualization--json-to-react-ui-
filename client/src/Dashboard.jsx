@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Line } from 'react-chartjs-2';
 import { Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from "chart.js/auto";
-import jsonData from './datas/new_data2.json';
+import jsonData from './datas/new_data.json';
 import myImage from './logo/background.png';
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
@@ -277,30 +277,33 @@ function Dashboard({ handlelogout }) {
                             className={`list ${activeListItem === 0 ? 'active' : ''}`}
                             onClick={() => handleListItemClick(0)}
                         >
-                            <span className="icons"><i className="fa fa-home"></i></span>
-                            <span className="content">Home</span>
+                            <a href="#card_id"><span className="icons"><i className="fa fa-home"></i></span>
+                            <span className="content">Home</span></a>
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 1 ? 'active' : ''}`}
                             onClick={() => handleListItemClick(1)}
                         >
-                            <span className="icons"><i className="fa fa-line-chart"></i></span>
-                            <span className="content">Graph</span>
+                            <a href="#graph"><span className="icons"><i className="fa fa-line-chart"></i></span>
+                            <span className="content">Graph</span></a>
+                            
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 2 ? 'active' : ''}`}
                             onClick={() => handleListItemClick(2)}
                         >
-                            <span className="icons"><i className="fa fa-calculator"></i></span>
-                            <span className="content">Calculation</span>
+                            <a href="#Calculation"><span className="icons"><i className="fa fa-calculator"></i></span>
+                            <span className="content">Calculation</span></a>
+                            
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 3 ? 'active' : ''}`}
                             onClick={handlelogout}
                         >
+                           
                             <span className="icons"><i className="fa fa-sign-out"></i></span>
                             <span className="content" >Logout</span>
                         </li>
@@ -312,7 +315,7 @@ function Dashboard({ handlelogout }) {
 
 
 
-            <div class="card">
+            <div class="card" id="card_id">
                 <div class="container">
                     <h1 className="text_card">About Us</h1>
                     <br /><br />
@@ -338,6 +341,7 @@ function Dashboard({ handlelogout }) {
                         <Line data={data} options={options} />
                     </div>
                 </div>
+                <br /><br /><br />
                 <div className="buttons1">
                     <div className="sec-bar">
                         <button className="btn-loc start" onClick={sendresponse}>Start</button>
