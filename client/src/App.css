@@ -169,7 +169,7 @@
 }
 
 .graph {
-  height: 65vh;
+  height: auto;
   width: 55%;
   background-color: #706d6d;
   z-index: 3;

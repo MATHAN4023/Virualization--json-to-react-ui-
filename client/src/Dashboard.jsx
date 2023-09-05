@@ -74,14 +74,8 @@ function Dashboard({ handlelogout }) {
     }, []);
 
 
-    // Define the increment value
-    const increment = 5;
+    const labels = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
-    // Calculate the number of labels based on data length and increment
-    const numLabels = Math.ceil(voltage.length / increment);
-
-    // Generate the labels array starting from 0
-    const labels = Array.from({ length: numLabels }, (_, i) => i * increment);
 
 
     const data = {
@@ -89,7 +83,7 @@ function Dashboard({ handlelogout }) {
         datasets: [
             {
                 label: 'Current',
-                data: current,
+                data:  current,
                 fill: false,
                 yAxisID: 'y',
                 borderColor: 'yellow',
@@ -140,30 +134,40 @@ function Dashboard({ handlelogout }) {
         },
         scales: {
             x: {
-                stepSize: 5,
+                type:"linear",
+                position:"bottom",
                 title: {
                     display: true,
+                    text:"voltage",
+                    color: 'black',
+                    font: {
+                        weight: '900',
+                        size:"15px"
+                    },
                 },
                 ticks: {
+                    stepSize:5,
                     color: 'black',
                     font: {
                         weight: 'bold',
                     },
-                    
-                    maxTicksLimit: 10,
                     beginAtZero: true,
                 },
-
             },
             y: {
                 beginAtZero: true,
                 position: 'left',
-
                 title: {
                     display: true,
-                    text: 'Left Scale',
+                    text: 'Current',
+                    color: 'black',
+                    font: {
+                        weight: '900',
+                        size:"15px"
+                    },
                 },
                 ticks: {
+                    stepSize:1,
                     color: 'black',
                     font: {
                         weight: 'bold',
@@ -172,18 +176,23 @@ function Dashboard({ handlelogout }) {
                 },
 
                 grid: {
-                    display: false, // Hide y-axis grid lines
+                    display: false, 
                 },
             },
             y1: {
                 beginAtZero: true,
                 position: 'right',
-                stepSize: 20,
                 title: {
                     display: true,
-                    text: 'Right Scale',
+                    text: 'Power',
+                    color: 'black',
+                    font: {
+                        weight: '900',
+                        size:"15px"
+                    },
                 },
                 ticks: {
+                    stepSize:10,
                     color: 'black',
                     font: {
                         weight: 'bold',
@@ -232,7 +241,6 @@ function Dashboard({ handlelogout }) {
             <div className="content">
                 <div className="graph">
                     <Line data={data} options={options} ref={chartRef} />
-                    <span className="display-flex" style={{ justifyContent: "center", alignItems: "center", fontWeight: "bold" }}>voltage</span>
                 </div>
                 <div className="values">
                     <table className="data-table">
