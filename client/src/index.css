@@ -6,7 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.loginform{
+
+.loginform {
   margin-top: -100%;
 }
 
@@ -14,19 +15,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:600|Work+Sans:400,500,600,700&display=swap');
 
-body{
+body {
   /* background: rgb(34,193,195); */
   /* background: linear-gradient(135deg, rgba(34,193,195,1) 100%,     rgba(253,187,45,1) 100%); */
   font-family: "work sans";
 }
 
-html{
+html {
   font-size: 100%;
 }
 
-#loginform{
+#loginform {
   max-width: 500px;
   min-width: 300px;
   max-height: 700px;
@@ -38,7 +40,7 @@ html{
   box-shadow: 1px 5px 5px 1px;
 }
 
-#headerTitle{
+#headerTitle {
   text-align: center;
   font-family: 'open sans', sans-serif;
   padding: 2rem 0;
@@ -46,108 +48,292 @@ html{
   font-size: 2rem;
 }
 
-.row{
+.row {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 2rem;
   max-width: 100%;
-  
+
 }
 
-.row input{
+.row input {
   width: 80%;
   box-sizing: border-box;
-	border: none;
+  border: none;
   font-size: 1.3rem;
   padding-left: 1.5rem;
   padding-bottom: 1rem;
-  box-shadow: inset 0px -3px 0px 0px rgba(187,187,187,0.2);
+  box-shadow: inset 0px -3px 0px 0px rgba(187, 187, 187, 0.2);
   transition: box-shadow 0.2s ease-in;
 }
 
-.row input:focus{
-   box-shadow: inset 0px -3px 0px 0px rgba(34,193,195,0.7);
-   outline: none;
+.row input:focus {
+  box-shadow: inset 0px -3px 0px 0px rgba(34, 193, 195, 0.7);
+  outline: none;
 }
 
-.row input::-webkit-input-placeholder{
+.row input::-webkit-input-placeholder {
   opacity: 1;
   transition: opacity 0.25s ease-out;
 }
 
 .row input:hover::-webkit-input-placeholder,
-.row input:focus::-webkit-input-placeholder{
+.row input:focus::-webkit-input-placeholder {
   opacity: 0;
 }
 
-.row label{
+.row label {
   align-self: start;
   padding-left: 4.5rem;
   padding-bottom: 0.5rem;
-  color: rgba(187,187,187,0.9);
+  color: rgba(187, 187, 187, 0.9);
+}
+
+.btn-primary {
+  width: 110px;
+  height: 40px;
 }
 
 
 /* button */
-.row button{
+.row button {
   border-radius: 25px;
   width: 80%;
   height: 40px;
   font-size: 1.3rem;
   color: white;
   font-weight: 700;
-  background: rgb(34,193,195);
-  background: linear-gradient(90deg, rgba(34,193,195,1) 0%,     rgba(253,187,45,1) 100%);
+  background: rgb(34, 193, 195);
+  background: linear-gradient(90deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
   border: 0px;
   cursor: pointer;
   transition: opacity 0.25s ease-out;
 }
 
-.row button:hover{
+.row button:hover {
   opacity: 0.8;
 }
 
-#button{
+#button {
   padding-bottom: 1.5rem;
 }
 
-#facebookIcon{
-  background-image:      url("https://image.flaticon.com/icons/svg/145/145802.svg");
+#facebookIcon {
+  background-image: url("https://image.flaticon.com/icons/svg/145/145802.svg");
   background-repeat: no-repeat;
   width: 3rem;
   height: 3rem;
 }
 
-#twitterIcon{
+#twitterIcon {
   background-image: url("https://image.flaticon.com/icons/svg/145/145812.svg");
   background-repeat: no-repeat;
   width: 3rem;
   height: 3rem;
 }
 
-#googleIcon{
+#googleIcon {
   background-image: url("https://image.flaticon.com/icons/svg/145/145804.svg");
   background-repeat: no-repeat;
   width: 3rem;
   height: 3rem;
 }
 
-#iconGroup{
+#iconGroup {
   display: flex;
   justify-content: center;
   padding: 2rem 0;
 }
 
-#iconGroup a{
+#iconGroup a {
   margin: 0 0.6rem;
 }
 
 #alternativeLogin {
-   text-align: center;
-   padding-top: 2rem;
-   margin-top: 1.5rem;
+  text-align: center;
+  padding-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 
 
+.backimage {
+  position: relative;
+  overflow: hidden;
+}
+
+.heading_1 {
+  position: absolute;
+  margin-top: 70px;
+  z-index: 1;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.heading_2 {
+  position: absolute;
+  margin-top: 100px;
+  z-index: 1;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.nav-bar {
+  position: absolute;
+  margin-top: -35px;
+  margin-left: 24%;
+  width: 50%;
+  height: 70px;
+  background-color: #ffffff;
+  box-shadow: 0px 2px 10px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 50px;
+  padding: 1rem;
+  align-items: center;
+}
+
+.container {
+  margin-top: 6rem;
+}
+
+.para {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: larger;
+}
+
+ul {
+  position: relative;
+  margin-inline: auto;
+  margin-block: 0px;
+  padding: 0px;
+  list-style: none;
+  flex-direction: row;
+  flex-grow: 0;
+  background: var(--x-home-categories-background);
+  display: inline-flex;
+  gap: var(--x-home-categories-button-gap);
+  overflow: auto hidden;
+  width: 100%;
+  vertical-align: top;
+  display: flex;
+  justify-content: space-around;
+  /*  margin-left: 2rem; */
+}
+
+.list {
+  width: 100px;
+}
+
+.nav-bar ul .list:hover .icons i {
+  color: #555;
+  /* Change to your desired hover icon color */
+}
+
+.nav-bar ul .list:hover .content {
+  color: #555;
+  /* Change to your desired hover text color */
+}
+
+.icons {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  margin-top: 100px;
+  width: 60%;
+  margin-left: 18rem;
+}
+
+.text_card {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.buttons1 {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-bar ul .list .icons i {
+  color: #000;
+  /* Default icon color */
+}
+
+.nav-bar ul .list .content {
+  color: #000;
+  /* Default text color */
+}
+
+.nav-bar ul .list.active .icons i {
+  color: blue;
+  /* Icon color on click */
+}
+
+.nav-bar ul .list.active .content {
+  color: blue;
+  /* Text color on click */
+}
+
+
+
+.clue {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 5px;
+  width: 300px;
+  text-align: center;
+}
+
+.card h2 {
+  font-size: 1em;
+}
+
+
+.value {
+  background-color: black;
+  border-radius: 10px;
+  color: green;
+  width: 9rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+
+.values {
+  color: white;
+  font-size: larger;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 50%;
+  width: 100%;
+  padding: 2rem;
+}
+
+.symbols {
+  font-size: 1em;
+  color: #888;
+}
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
