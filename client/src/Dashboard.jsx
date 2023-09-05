@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Line } from 'react-chartjs-2';
 import { Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from "chart.js/auto";
-import jsonData from './datas/new_data2.json';
+import jsonData from './datas/new_data.json';
 import myImage from './logo/background.png';
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
