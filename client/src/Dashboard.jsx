@@ -41,10 +41,10 @@ function Dashboard({ handlelogout }) {
     const chartRef = useRef(null);
 
     const booleanseconds = useRef(false)
-
     const current = jsonData.map(item => item.Current);
     const voltage = jsonData.map(item => item.Voltage);
     const power1 = jsonData.map(item => item.Power);
+    
     // const myRef = useRef(null);
     useEffect(() => {
         calculatevalues();
