@@ -3,6 +3,9 @@ import time
 
 sio = socketio.Client()
 
+# if use in raspberry pi uase pip3 install python-socketio
+
+
 @sio.on('message-from-node')
 def on_message(data):
     print('Received message from server:', data)
