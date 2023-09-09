@@ -64,7 +64,8 @@ function Dashboard({ handlelogout }) {
         setff((powermax / (ocv * scc)).toFixed(3));
         seteff((powermax / (1.960192 * 1000) * 100).toFixed(3));
     }
-    // const ff= 527;
+
+
     const sendresponse = async () => {
         const body = { command }
         booleanseconds.current = true;
@@ -73,6 +74,13 @@ function Dashboard({ handlelogout }) {
         loader.style.display = "flex";
 
         socket.emit('send-message-react', true)
+
+
+        setTimeout(() => {
+            if (booleanseconds.current) {
+                receiveresponse();
+            }
+        }, 30000);
     }
 
     //export function
@@ -368,7 +376,7 @@ function saveimage() {
                 <h1 className="text_card">Graph</h1>
 
                 <div id="loader" className="loader">
-                    <button className="btn-loc stop" style={{ width: "fit-content" }} onClick={receiveresponse}>{seconds} sec - Stop</button>
+                    <div className="loading"></div>
                 </div>
 
 
