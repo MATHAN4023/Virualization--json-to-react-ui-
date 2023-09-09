@@ -73,16 +73,18 @@ function Dashboard({ handlelogout }) {
     });
 
 
-    const calculatevalues = () => {
-        const powermax = Math.max(...power1)
+    const calculatevalues = (current1,voltage1,power2) => {
+        const numericPower2 = power2.filter(value => typeof value === 'number');
+        console.log(numericPower2)
+        const powermax = Math.max(...power2)
         setpmax((powermax).toFixed(3));
-        const indexOfMaxValue = power1.indexOf(powermax);
-        setvmaxp((voltage[indexOfMaxValue]).toFixed(3));
-        setimaxp((current[indexOfMaxValue]).toFixed(3));
-        const indexOfMinVoltage = voltage.indexOf(Math.max(...voltage));
-        const indexOfMincurrent = voltage.indexOf(Math.min(...current));
-        setocv(voltage[indexOfMinVoltage]);
-        setscc(current[indexOfMincurrent].toFixed(3));
+        const indexOfMaxValue = power2.indexOf(powermax);
+        setvmaxp((voltage1[indexOfMaxValue]).toFixed(3));
+        setimaxp((current1[indexOfMaxValue]).toFixed(3));
+        const indexOfMinVoltage = voltage1.indexOf(Math.max(...voltage1));
+        const indexOfMincurrent = voltage1.indexOf(Math.min(...current1));
+        setocv(voltage1[indexOfMinVoltage]);
+        setscc(current1[indexOfMincurrent].toFixed(3));
         setff((powermax / (ocv * scc)).toFixed(3));
         seteff((powermax / (1.960192 * 1000) * 100).toFixed(3));
     }
@@ -102,7 +104,7 @@ function Dashboard({ handlelogout }) {
             if (booleanseconds.current) {
                 receiveresponse();
             }
-        }, 5000);
+        }, 2000);
     }
 
     //export function
@@ -127,18 +129,18 @@ function Dashboard({ handlelogout }) {
         const data = await response.json();
         setalldata(data);
 
-        const filteredData = data.map(item => item.Current);
-        setcurrent(filteredData);
+        const current1 = data.map(item => item.Current);
+        setcurrent(current1);
 
-        const filteredData1 = data.map(item => item.Voltage);
-        setvoltage(filteredData1)
+        const voltage1 = data.map(item => item.Voltage);
+        setvoltage(voltage1)
 
-        const filteredData2 = data.map(item => parseFloat(item.Power));
-        setpower1(filteredData2);
+        const power2 = data.map(item => item.Power);
+        setpower1(power2);
 
         loader.style.display = "none";
         booleanseconds.current = false;
-        calculatevalues(data);
+        calculatevalues(current1,voltage1,power2);
         setgraphdata(data);
     }
 
@@ -288,26 +290,21 @@ function Dashboard({ handlelogout }) {
     };
 
   
-    // const saveimage =()=>{
-    //     window.confirm("are sure want to save the image?");
-    // }
-
-     // You may need to import this library
+ 
 
 function saveimage() {
-  // Select the element containing the graph (assuming it's an HTML element)
-  const graphElement = document.getElementById('your-graph-id'); // Replace with your actual element ID
+ 
+  const graphElement = document.getElementById('your-graph-id'); 
 
-  // Use html2canvas to capture the graph as an image
+  
   html2canvas(graphElement)
     .then((canvas) => {
-      // Convert the canvas to a data URL
-      const imageDataURL = canvas.toDataURL('image/png'); // You can change the format if needed
+      const imageDataURL = canvas.toDataURL('image/png');
 
       // Create an anchor element to trigger the download
       const downloadLink = document.createElement('a');
       downloadLink.href = imageDataURL;
-      downloadLink.download = 'graph.png'; // Set the desired file name
+      downloadLink.download = 'graph.png';
 
       // Trigger the download
       downloadLink.click();
