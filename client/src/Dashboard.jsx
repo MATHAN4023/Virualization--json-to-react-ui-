@@ -64,7 +64,15 @@ function Dashboard({ handlelogout }) {
         seteff((powermax/(1.960192 * 1000)*100).toFixed(3));
     }
     	// const ff= 527;
+    const sendresponse = async () => {
+        const body = { command }
+        booleanseconds.current = true;
+        const loader = document.getElementById("loader");
+        loader.style.display = "block";
+        loader.style.display = "flex";
 
+        socket.emit('send-message-react', true)
+    }
 
     //export function
     const exportData = () => {
@@ -79,36 +87,15 @@ function Dashboard({ handlelogout }) {
         link.click();
         document.body.removeChild(link);
     }
-    let timeoutId = null; // Variable to store the timeout ID
 
-const sendresponse = async () => {
-    const body = { command };
-    booleanseconds.current = true;
-    const loader = document.getElementById("loader");
-    loader.style.display = "block";
-    loader.style.display = "flex";
 
-    // Emit the 'send-message-react' event with the boolean value 'true'
-    socket.emit('send-message-react', true);
-
-    // Set a timeout to call 'receiveresponse' after 30 seconds
-    timeoutId = setTimeout(receiveresponse, 30000); // 30,000 milliseconds = 30 seconds
-};
-
-const receiveresponse = async () => {
-    const loader = document.getElementById("loader");
-    socket.emit('send-message-react', false);
-    loader.style.display = "none";
-    booleanseconds.current = false;
-    setSeconds(0);
-    
-    // Clear the timeout if 'receiveresponse' is called manually
-    if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
+    const receiveresponse = async () => {
+        const loader = document.getElementById("loader");
+        socket.emit('send-message-react', false)
+        loader.style.display = "none";
+        booleanseconds.current = false;
+        setSeconds(0);
     }
-};
-
 
     useEffect(() => {
         socket.on('message-to-react', (socketdata) => {

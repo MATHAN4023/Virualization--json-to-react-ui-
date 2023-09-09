@@ -3,7 +3,7 @@ import time
 
 sio = socketio.Client()
 
-# if use in raspberry pi uase pip3 install python-socketio
+# if use in raspberry pi use pip3 install python-socketio
 
 
 @sio.on('message-from-node')
