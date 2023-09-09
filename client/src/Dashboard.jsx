@@ -8,6 +8,7 @@ import Papa from 'papaparse';
 import { io } from "socket.io-client";
 import 'chartjs-plugin-annotation';
 import 'font-awesome/css/font-awesome.min.css';
+import html2canvas from 'html2canvas';
 
 
 function Dashboard({ handlelogout }) {
@@ -286,6 +287,36 @@ function Dashboard({ handlelogout }) {
         },
     };
 
+  
+    // const saveimage =()=>{
+    //     window.confirm("are sure want to save the image?");
+    // }
+
+     // You may need to import this library
+
+function saveimage() {
+  // Select the element containing the graph (assuming it's an HTML element)
+  const graphElement = document.getElementById('your-graph-id'); // Replace with your actual element ID
+
+  // Use html2canvas to capture the graph as an image
+  html2canvas(graphElement)
+    .then((canvas) => {
+      // Convert the canvas to a data URL
+      const imageDataURL = canvas.toDataURL('image/png'); // You can change the format if needed
+
+      // Create an anchor element to trigger the download
+      const downloadLink = document.createElement('a');
+      downloadLink.href = imageDataURL;
+      downloadLink.download = 'graph.png'; // Set the desired file name
+
+      // Trigger the download
+      downloadLink.click();
+    })
+    .catch((error) => {
+      console.error('Error saving image:', error);
+    });
+}
+
 
 
 
@@ -383,8 +414,13 @@ function Dashboard({ handlelogout }) {
                         <button className="btn-loc start" onClick={sendresponse}>Start</button>
                     </div>
                     <div className="sec-bar">
-                        <button className="btn btn-primary" onClick={exportData}>Export</button>
+                        <button className="btn-loc start btn btn-primary" onClick={exportData}>Export</button>
                     </div>
+                    <div className="sec-bar" style={{ whiteSpace: 'nowrap' }}>
+                        <button className="btn-loc start btn btn-warning" onClick={saveimage}>Save graph</button>
+                    </div>
+
+
                 </div>
             </div>
 
