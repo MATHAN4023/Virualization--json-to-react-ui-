@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { Line } from 'react-chartjs-2';
 import { Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from "chart.js/auto";
-import jsonData from './datas/new_data_540W.json';
 import myImage from './logo/background.png';
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
@@ -36,21 +35,45 @@ function Dashboard({ handlelogout }) {
     const [scc, setscc] = useState();
     const [seconds, setSeconds] = useState(0);
 
+    // data
+    const [alldata, setalldata] = useState();
+    const [current, setcurrent] = useState();
+    const [voltage, setvoltage] = useState();
+    const [power1, setpower1] = useState();
+
     const [command, setcommand] = useState(true)
     const chartRef = useRef(null);
 
     const booleanseconds = useRef(false)
 
-    const current = jsonData.map(item => item.Current);
-    const voltage = jsonData.map(item => item.Voltage);
-    const power1 = jsonData.map(item => item.Power);
-    // const myRef = useRef(null);
-    useEffect(() => {
-        calculatevalues();
-    }, [voltage, current]);
+    //graph state
+    const [datas, setData] = useState({
+        labels: [],
+        datasets: [
+            {
+                label: 'Current',
+                data: [],
+                fill: false,
+                yAxisID: 'y',
+                borderColor: 'blue',
+                pointRadius: 2,
+                tension: 0.4,
+            },
+            {
+                label: 'Power',
+                data: [],
+                fill: false,
+                yAxisID: 'y1',
+                borderColor: 'red',
+                pointRadius: 2,
+                tension: 0.4,
+            },
+        ],
+    });
+
+
     const calculatevalues = () => {
         const powermax = Math.max(...power1)
-        console.log(powermax);
         setpmax((powermax).toFixed(3));
         const indexOfMaxValue = power1.indexOf(powermax);
         setvmaxp((voltage[indexOfMaxValue]).toFixed(3));
@@ -59,7 +82,6 @@ function Dashboard({ handlelogout }) {
         const indexOfMincurrent = voltage.indexOf(Math.min(...current));
         setocv(voltage[indexOfMinVoltage]);
         setscc(current[indexOfMincurrent].toFixed(3));
-        // console.log(powermax,ocv,scc);
         setff((powermax / (ocv * scc)).toFixed(3));
         seteff((powermax / (1.960192 * 1000) * 100).toFixed(3));
     }
@@ -79,13 +101,13 @@ function Dashboard({ handlelogout }) {
             if (booleanseconds.current) {
                 receiveresponse();
             }
-        }, 30000);
+        }, 5000);
     }
 
     //export function
     const exportData = () => {
         const filename = 'SolarAnalyser.csv';
-        const csv = Papa.unparse(jsonData);
+        const csv = Papa.unparse(alldata);
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -100,10 +122,52 @@ function Dashboard({ handlelogout }) {
     const receiveresponse = async () => {
         const loader = document.getElementById("loader");
         socket.emit('send-message-react', false)
+        const response = await fetch('http://localhost:4000/api/data')
+        const data = await response.json();
+        setalldata(data);
+
+        const filteredData = data.map(item => item.Current);
+        setcurrent(filteredData);
+
+        const filteredData1 = data.map(item => item.Voltage);
+        setvoltage(filteredData1)
+
+        const filteredData2 = data.map(item => parseFloat(item.Power));
+        setpower1(filteredData2);
+
         loader.style.display = "none";
         booleanseconds.current = false;
-        setSeconds(0);
+        calculatevalues(data);
+        setgraphdata(data);
     }
+
+    const setgraphdata = (data) => {
+        setData({
+            labels: data.map(item => item.Voltage),
+            datasets: [
+                {
+                    label: 'Current',
+                    data: data.map(item => item.Current),
+                    fill: false,
+                    yAxisID: 'y',
+                    borderColor: 'blue',
+                    pointRadius: 2,
+                    tension: 0.4,
+                },
+                {
+                    label: 'Power',
+                    data: data.map(item => item.Power),
+                    fill: false,
+                    yAxisID: 'y1',
+                    borderColor: 'red',
+                    pointRadius: 2,
+                    tension: 0.4,
+                },
+            ],
+        });
+    }
+
+
 
     useEffect(() => {
         socket.on('message-to-react', (socketdata) => {
@@ -113,32 +177,6 @@ function Dashboard({ handlelogout }) {
             socket.off('message-to-react');
         };
     }, []);
-
-
-
-    const data = {
-        labels: voltage,
-        datasets: [
-            {
-                label: 'Current',
-                data: current,
-                fill: false,
-                yAxisID: 'y',
-                borderColor: 'blue',
-                pointRadius: 2,
-                tension: 0.4,
-            },
-            {
-                label: 'Power',
-                data: power1,
-                fill: false,
-                yAxisID: 'y1',
-                borderColor: 'red',
-                pointRadius: 2,
-                tension: 0.4,
-            },
-        ],
-    };
 
 
     const options = {
@@ -248,23 +286,6 @@ function Dashboard({ handlelogout }) {
         },
     };
 
-    useEffect(() => {
-        calculatevalues()
-        let intervalId;
-
-        const incrementSeconds = () => {
-            if (booleanseconds.current) {
-                setSeconds(prevSeconds => prevSeconds + 1);
-            }
-        };
-
-        intervalId = setInterval(incrementSeconds, 1000);
-
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, [])
-
 
 
 
@@ -353,7 +374,7 @@ function Dashboard({ handlelogout }) {
 
                 <div className="content">
                     <div className="graph">
-                        <Line data={data} options={options} />
+                        <Line data={datas} options={options} />
                     </div>
                 </div>
                 <br /><br /><br />
