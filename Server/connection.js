@@ -10,7 +10,7 @@ app.use(cors())
 
 app.get('/api/data', async (req, res) => {
     try {
-        const data = JSON.parse(fs.readFileSync(`C:\\Users\\91936\\Desktop\\new_data_540W.json`, 'utf8'));
+        const data = JSON.parse(fs.readFileSync(`C:\\Users\\mazzm\\Desktop\\new_data_540W.json`, 'utf8'));
         res.json(data);
     } catch (error) {
         console.log("error")
