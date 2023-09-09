@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Line } from 'react-chartjs-2';
 import { Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from "chart.js/auto";
-import jsonData from './datas/new_data.json';
+import jsonData from './datas/new_data_540W.json';
 import myImage from './logo/background.png';
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
@@ -44,29 +44,27 @@ function Dashboard({ handlelogout }) {
     const current = jsonData.map(item => item.Current);
     const voltage = jsonData.map(item => item.Voltage);
     const power1 = jsonData.map(item => item.Power);
-
+    // const myRef = useRef(null);
+    useEffect(()=>{
+        calculatevalues();
+    },[voltage, current]);
     const calculatevalues = () => {
         const powermax = Math.max(...power1)
-        setpmax(powermax);
+        console.log(powermax);
+        setpmax((powermax).toFixed(3));
         const indexOfMaxValue = power1.indexOf(powermax);
-        setvmaxp(voltage[indexOfMaxValue])
-        setimaxp(current[indexOfMaxValue])
-        const indexOfMinVoltage = voltage.indexOf(Math.min(...voltage));
-        setocv(voltage[indexOfMinVoltage])
-        const indexOfMincurrent = current.indexOf(Math.min(...current));
-        setscc(current[indexOfMincurrent]);
-        setff((pmax / (ocv * scc)).toFixed(3));
+        setvmaxp((voltage[indexOfMaxValue]).toFixed(3));
+        setimaxp((current[indexOfMaxValue]).toFixed(3));
+        const indexOfMinVoltage = voltage.indexOf(Math.max(...voltage));
+        const indexOfMincurrent = voltage.indexOf(Math.min(...current));
+        setocv(voltage[indexOfMinVoltage]);
+        setscc(current[indexOfMincurrent].toFixed(3));
+        // console.log(powermax,ocv,scc);
+        setff((powermax/(ocv*scc)).toFixed(3));
+        seteff((powermax/(1.960192 * 1000)*100).toFixed(3));
     }
+    	// const ff= 527;
 
-    const sendresponse = async () => {
-        const body = { command }
-        booleanseconds.current = true;
-        const loader = document.getElementById("loader");
-        loader.style.display = "block";
-        loader.style.display = "flex";
-
-        socket.emit('send-message-react', true)
-    }
 
     //export function
     const exportData = () => {
@@ -81,15 +79,36 @@ function Dashboard({ handlelogout }) {
         link.click();
         document.body.removeChild(link);
     }
+    let timeoutId = null; // Variable to store the timeout ID
 
+const sendresponse = async () => {
+    const body = { command };
+    booleanseconds.current = true;
+    const loader = document.getElementById("loader");
+    loader.style.display = "block";
+    loader.style.display = "flex";
 
-    const receiveresponse = async () => {
-        const loader = document.getElementById("loader");
-        socket.emit('send-message-react', false)
-        loader.style.display = "none";
-        booleanseconds.current = false;
-        setSeconds(0);
+    // Emit the 'send-message-react' event with the boolean value 'true'
+    socket.emit('send-message-react', true);
+
+    // Set a timeout to call 'receiveresponse' after 30 seconds
+    timeoutId = setTimeout(receiveresponse, 30000); // 30,000 milliseconds = 30 seconds
+};
+
+const receiveresponse = async () => {
+    const loader = document.getElementById("loader");
+    socket.emit('send-message-react', false);
+    loader.style.display = "none";
+    booleanseconds.current = false;
+    setSeconds(0);
+    
+    // Clear the timeout if 'receiveresponse' is called manually
+    if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
     }
+};
+
 
     useEffect(() => {
         socket.on('message-to-react', (socketdata) => {
@@ -110,7 +129,7 @@ function Dashboard({ handlelogout }) {
                 data: current,
                 fill: false,
                 yAxisID: 'y',
-                borderColor: 'yellow',
+                borderColor: 'blue',
                 pointRadius: 2,
                 tension: 0.4,
             },
@@ -167,8 +186,8 @@ function Dashboard({ handlelogout }) {
                     text: "Voltage(V)",
                     color: 'black',
                     font: {
-                        weight: '900',
-                        size: "15px"
+                        weight: '100',
+                        size: "25px"
                     },
                 },
                 ticks: {
@@ -190,8 +209,8 @@ function Dashboard({ handlelogout }) {
                     text: 'Current(I)',
                     color: 'black',
                     font: {
-                        weight: '900',
-                        size: "15px"
+                        weight: '100',
+                        size: "25px"
                     },
                 },
                 ticks: {
@@ -202,20 +221,21 @@ function Dashboard({ handlelogout }) {
                     },
                 },
 
-                grid: {
-                    display: true,
-                },
+                
             },
             y1: {
+                grid:{
+                    display:false
+                },
                 beginAtZero: true,
                 position: 'right',
                 title: {
                     display: true,
-                    text: 'Power(P)',
+                    text: 'Power(W)',
                     color: 'black',
                     font: {
-                        weight: '900',
-                        size: "15px"
+                        weight: '100',
+                        size: "25px"
                     },
                 },
                 ticks: {
@@ -228,7 +248,7 @@ function Dashboard({ handlelogout }) {
             },
         },
         grid: {
-            display: true,
+            display: false,
             borderWidth: 1,
         },
     };
@@ -254,7 +274,7 @@ function Dashboard({ handlelogout }) {
 
 
     return (
-        <div className="boddy" >
+        <div className="boddy">
 
             <div className="heading_1">
                 <h5>Welcome To</h5>
@@ -373,13 +393,13 @@ function Dashboard({ handlelogout }) {
                                 <div className="symbols">V</div>
                             </div>
                         </div>
-                        <div className="card clue">
+                        {/* <div className="card clue">
                             <h2>Ishort</h2>
                             <div className="inner-card">
                                 <div className="value">733.0</div>
                                 <div className="symbols">mA</div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className="card clue">
                             <h2>Pmax</h2>
                             <div className="inner-card">
@@ -404,17 +424,17 @@ function Dashboard({ handlelogout }) {
 
                         </div>
                         <div className="card clue">
-                            <h2>EFF</h2>
+                            <h2>Efficiency (EFF)</h2>
                             <div className="inner-card">
                                 <div className="inner-card">
-                                    <div className="value">0.078</div>
+                                    <div className="value">{eff}</div>
                                     <div className="symbols">%</div>
                                 </div>
                             </div>
 
                         </div>
                         <div className="card clue">
-                            <h2>FF</h2>
+                            <h2>Fill Factor</h2>
                             <div className="inner-card">
                                 <div className="value">{ff}</div>
                             </div>
