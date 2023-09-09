@@ -45,9 +45,9 @@ function Dashboard({ handlelogout }) {
     const voltage = jsonData.map(item => item.Voltage);
     const power1 = jsonData.map(item => item.Power);
     // const myRef = useRef(null);
-    useEffect(()=>{
+    useEffect(() => {
         calculatevalues();
-    },[voltage, current]);
+    }, [voltage, current]);
     const calculatevalues = () => {
         const powermax = Math.max(...power1)
         console.log(powermax);
@@ -60,10 +60,11 @@ function Dashboard({ handlelogout }) {
         setocv(voltage[indexOfMinVoltage]);
         setscc(current[indexOfMincurrent].toFixed(3));
         // console.log(powermax,ocv,scc);
-        setff((powermax/(ocv*scc)).toFixed(3));
-        seteff((powermax/(1.960192 * 1000)*100).toFixed(3));
+        setff((powermax / (ocv * scc)).toFixed(3));
+        seteff((powermax / (1.960192 * 1000) * 100).toFixed(3));
     }
-    	// const ff= 527;
+
+
     const sendresponse = async () => {
         const body = { command }
         booleanseconds.current = true;
@@ -72,11 +73,18 @@ function Dashboard({ handlelogout }) {
         loader.style.display = "flex";
 
         socket.emit('send-message-react', true)
+
+
+        setTimeout(() => {
+            if (booleanseconds.current) {
+                receiveresponse();
+            }
+        }, 30000);
     }
 
     //export function
     const exportData = () => {
-        const filename='SolarAnalyser.csv';
+        const filename = 'SolarAnalyser.csv';
         const csv = Papa.unparse(jsonData);
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -208,11 +216,11 @@ function Dashboard({ handlelogout }) {
                     },
                 },
 
-                
+
             },
             y1: {
-                grid:{
-                    display:false
+                grid: {
+                    display: false
                 },
                 beginAtZero: true,
                 position: 'right',
@@ -285,7 +293,7 @@ function Dashboard({ handlelogout }) {
                             onClick={() => handleListItemClick(0)}
                         >
                             <a href="#card_id"><span className="icons"><i className="fa fa-home"></i></span>
-                            <span className="content">Home</span></a>
+                                <span className="content">Home</span></a>
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
@@ -293,8 +301,8 @@ function Dashboard({ handlelogout }) {
                             onClick={() => handleListItemClick(1)}
                         >
                             <a href="#graph"><span className="icons"><i className="fa fa-line-chart"></i></span>
-                            <span className="content">Graph</span></a>
-                            
+                                <span className="content">Graph</span></a>
+
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
@@ -302,15 +310,15 @@ function Dashboard({ handlelogout }) {
                             onClick={() => handleListItemClick(2)}
                         >
                             <a href="#Calculation"><span className="icons"><i className="fa fa-calculator"></i></span>
-                            <span className="content">Calculation</span></a>
-                            
+                                <span className="content">Calculation</span></a>
+
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 3 ? 'active' : ''}`}
                             onClick={handlelogout}
                         >
-                           
+
                             <span className="icons"><i className="fa fa-sign-out"></i></span>
                             <span className="content" >Logout</span>
                         </li>
@@ -339,7 +347,7 @@ function Dashboard({ handlelogout }) {
                 <h1 className="text_card">Graph</h1>
 
                 <div id="loader" className="loader">
-                    <button className="btn-loc stop" style={{ width: "fit-content" }} onClick={receiveresponse}>{seconds} sec - Stop</button>
+                    <div className="loading"></div>
                 </div>
 
 
