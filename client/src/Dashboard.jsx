@@ -9,6 +9,7 @@ import Papa from 'papaparse';
 import { io } from "socket.io-client";
 import 'chartjs-plugin-annotation';
 import 'font-awesome/css/font-awesome.min.css';
+import html2canvas from 'html2canvas';
 
 
 function Dashboard({ handlelogout }) {
@@ -45,9 +46,9 @@ function Dashboard({ handlelogout }) {
     const voltage = jsonData.map(item => item.Voltage);
     const power1 = jsonData.map(item => item.Power);
     // const myRef = useRef(null);
-    useEffect(()=>{
+    useEffect(() => {
         calculatevalues();
-    },[voltage, current]);
+    }, [voltage, current]);
     const calculatevalues = () => {
         const powermax = Math.max(...power1)
         console.log(powermax);
@@ -60,10 +61,10 @@ function Dashboard({ handlelogout }) {
         setocv(voltage[indexOfMinVoltage]);
         setscc(current[indexOfMincurrent].toFixed(3));
         // console.log(powermax,ocv,scc);
-        setff((powermax/(ocv*scc)).toFixed(3));
-        seteff((powermax/(1.960192 * 1000)*100).toFixed(3));
+        setff((powermax / (ocv * scc)).toFixed(3));
+        seteff((powermax / (1.960192 * 1000) * 100).toFixed(3));
     }
-    	// const ff= 527;
+    // const ff= 527;
     const sendresponse = async () => {
         const body = { command }
         booleanseconds.current = true;
@@ -76,7 +77,7 @@ function Dashboard({ handlelogout }) {
 
     //export function
     const exportData = () => {
-        const filename='SolarAnalyser.csv';
+        const filename = 'SolarAnalyser.csv';
         const csv = Papa.unparse(jsonData);
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -208,11 +209,11 @@ function Dashboard({ handlelogout }) {
                     },
                 },
 
-                
+
             },
             y1: {
-                grid:{
-                    display:false
+                grid: {
+                    display: false
                 },
                 beginAtZero: true,
                 position: 'right',
@@ -256,6 +257,34 @@ function Dashboard({ handlelogout }) {
             clearInterval(intervalId);
         };
     }, [])
+    // const saveimage =()=>{
+    //     window.confirm("are sure want to save the image?");
+    // }
+
+     // You may need to import this library
+
+function saveimage() {
+  // Select the element containing the graph (assuming it's an HTML element)
+  const graphElement = document.getElementById('your-graph-id'); // Replace with your actual element ID
+
+  // Use html2canvas to capture the graph as an image
+  html2canvas(graphElement)
+    .then((canvas) => {
+      // Convert the canvas to a data URL
+      const imageDataURL = canvas.toDataURL('image/png'); // You can change the format if needed
+
+      // Create an anchor element to trigger the download
+      const downloadLink = document.createElement('a');
+      downloadLink.href = imageDataURL;
+      downloadLink.download = 'graph.png'; // Set the desired file name
+
+      // Trigger the download
+      downloadLink.click();
+    })
+    .catch((error) => {
+      console.error('Error saving image:', error);
+    });
+}
 
 
 
@@ -285,7 +314,7 @@ function Dashboard({ handlelogout }) {
                             onClick={() => handleListItemClick(0)}
                         >
                             <a href="#card_id"><span className="icons"><i className="fa fa-home"></i></span>
-                            <span className="content">Home</span></a>
+                                <span className="content">Home</span></a>
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
@@ -293,8 +322,8 @@ function Dashboard({ handlelogout }) {
                             onClick={() => handleListItemClick(1)}
                         >
                             <a href="#graph"><span className="icons"><i className="fa fa-line-chart"></i></span>
-                            <span className="content">Graph</span></a>
-                            
+                                <span className="content">Graph</span></a>
+
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
@@ -302,15 +331,15 @@ function Dashboard({ handlelogout }) {
                             onClick={() => handleListItemClick(2)}
                         >
                             <a href="#Calculation"><span className="icons"><i className="fa fa-calculator"></i></span>
-                            <span className="content">Calculation</span></a>
-                            
+                                <span className="content">Calculation</span></a>
+
                         </li>
                         <li
                             style={{ cursor: "pointer" }}
                             className={`list ${activeListItem === 3 ? 'active' : ''}`}
                             onClick={handlelogout}
                         >
-                           
+
                             <span className="icons"><i className="fa fa-sign-out"></i></span>
                             <span className="content" >Logout</span>
                         </li>
@@ -344,7 +373,7 @@ function Dashboard({ handlelogout }) {
 
 
                 <div className="content">
-                    <div className="graph">
+                    <div className="graph"  id="your-graph-id">
                         <Line data={data} options={options} />
                     </div>
                 </div>
@@ -354,8 +383,13 @@ function Dashboard({ handlelogout }) {
                         <button className="btn-loc start" onClick={sendresponse}>Start</button>
                     </div>
                     <div className="sec-bar">
-                        <button className="btn btn-primary" onClick={exportData}>Export</button>
+                        <button className="btn-loc start btn btn-primary" onClick={exportData}>Export</button>
                     </div>
+                    <div className="sec-bar" style={{ whiteSpace: 'nowrap' }}>
+                        <button className="btn-loc start btn btn-warning" onClick={saveimage}>Save graph</button>
+                    </div>
+
+
                 </div>
             </div>
 
