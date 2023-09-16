@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom"; // Import createRoot
 import './index.css'; // Import any necessary CSS files
 import credentials from './login_credential.json';
-
+import myImage from './logo/background_solar.jpg';
+import './Login.css';
 function Login({ access_provider }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -19,9 +20,13 @@ function Login({ access_provider }) {
     }
 
     return (
-        < >
+        <div id="bgimage">
             {/* ... rest of your component */}
+            {/* <div className="log_backimage">
+                <img src={myImage} alt="My Image" className="log_backimage1" />
+                </div> */}
             < div id="loginform" >
+
                 <FormHeader title="Login" />
                 <div>
                     <FormInput
@@ -50,7 +55,7 @@ function Login({ access_provider }) {
 
 
             </div >
-        </>
+        </div>
     );
 }
 

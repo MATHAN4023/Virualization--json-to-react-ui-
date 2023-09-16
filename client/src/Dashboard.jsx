@@ -1,3 +1,5 @@
+//import the files:
+
 import React, { useRef } from "react";
 import { Line } from 'react-chartjs-2';
 import { Scatter } from 'react-chartjs-2';
@@ -14,15 +16,16 @@ import html2canvas from 'html2canvas';
 function Dashboard({ handlelogout }) {
     const socket = io('http://localhost:5000/');
 
-    // State to track the active list item
+// State to track the active list item
     const [activeListItem, setActiveListItem] = useState(null);
 
-    // Function to handle list item click
+// Function to handle list item click
     const handleListItemClick = (index) => {
         setActiveListItem(index);
     }
 
-    // state
+// state creation
+
     const [vnow, setvnow] = useState();
     const [vopen, setvopen] = useState();
     const [ishort, setishort] = useState();
@@ -35,8 +38,10 @@ function Dashboard({ handlelogout }) {
     const [ocv, setocv] = useState();
     const [scc, setscc] = useState();
     const [seconds, setSeconds] = useState(0);
+    const [var1, setvar1] = useState();
+    const [var2, setvar2] = useState();
 
-    // data
+// data
     const [alldata, setalldata] = useState();
     const [current, setcurrent] = useState();
     const [voltage, setvoltage] = useState();
@@ -47,7 +52,8 @@ function Dashboard({ handlelogout }) {
 
     const booleanseconds = useRef(false)
 
-    //graph state
+
+//graph state
     const [datas, setData] = useState({
         labels: [],
         datasets: [
@@ -72,23 +78,64 @@ function Dashboard({ handlelogout }) {
         ],
     });
 
+//get values from user var1 = area var2 = irradiance
 
-    const calculatevalues = (current1,voltage1,power2) => {
-        const numericPower2 = power2.filter(value => typeof value === 'number');
-        console.log(numericPower2)
-        const powermax = Math.max(...power2)
-        setpmax((powermax).toFixed(3));
-        const indexOfMaxValue = power2.indexOf(powermax);
-        setvmaxp((voltage1[indexOfMaxValue]).toFixed(3));
-        setimaxp((current1[indexOfMaxValue]).toFixed(3));
-        const indexOfMinVoltage = voltage1.indexOf(Math.max(...voltage1));
-        const indexOfMincurrent = voltage1.indexOf(Math.min(...current1));
-        setocv(voltage1[indexOfMinVoltage]);
-        setscc(current1[indexOfMincurrent].toFixed(3));
-        setff((powermax / (ocv * scc)).toFixed(3));
-        seteff((powermax / (1.960192 * 1000) * 100).toFixed(3));
+    const handle_var1 = (e) => {
+        setvar1(e.target.value);
+        console.log(e.target.value);
+    }
+    const handle_var2 = (e1) => {
+        setvar2(e1.target.value)
     }
 
+
+
+//calculations for the  calculation module (pmax,vmaxp)
+
+    const calculatevalues = (current1, voltage1, power2) => {
+        const numericPower2 = power2.filter(value => typeof value === 'number');
+        if (numericPower2.length === 0) {
+          console.error('power2 does not contain valid numeric values');
+          return;
+        }    
+        const powermax = Math.max(...numericPower2);
+        if (isNaN(powermax)) {
+          console.error('powermax is not a valid number');
+          return;
+        }
+        setpmax(parseFloat(powermax));    
+        const indexOfMaxValue = power2.indexOf(powermax);
+        if (indexOfMaxValue === -1) {
+          console.error('indexOfMaxValue is -1, powermax not found in power2');
+          return;
+        }
+        setvmaxp(parseFloat(voltage1[indexOfMaxValue]));
+        setimaxp(parseFloat(current1[indexOfMaxValue])); 
+        const maxVoltage = Math.max(...voltage1);
+        const minCurrent = Math.max(...current1);
+        const indexOfMinVoltage = voltage1.indexOf(maxVoltage);
+        if (indexOfMinVoltage === -1) {
+          console.error('indexOfMinVoltage is -1, maximum voltage not found in voltage1');
+          return;
+        }
+        const indexOfMinCurrent = current1.indexOf(minCurrent);
+        if (indexOfMinCurrent === -1) {
+          console.error('indexOfMinCurrent is -1, minimum current not found in current1');
+          return;
+        }
+        setocv(voltage1[indexOfMinVoltage]);
+        setscc(parseFloat(current1[indexOfMinCurrent]));
+      
+        const efficiency = ((powermax / (maxVoltage * minCurrent)) * 100);
+        seteff(parseFloat(efficiency));
+      };
+    useEffect(() => {
+        console.log(pmax, ocv, scc);
+        setff(pmax / (ocv * scc));
+    }, [pmax, ocv, scc])
+    
+      
+//emit the responce 
 
     const sendresponse = async () => {
         const body = { command }
@@ -104,12 +151,15 @@ function Dashboard({ handlelogout }) {
             if (booleanseconds.current) {
                 receiveresponse();
             }
-        }, 2000);
+        }, 10000);
     }
 
-    //export function
+//export the data as csv file with date and time
+
     const exportData = () => {
-        const filename = 'SolarAnalyser.csv';
+        const currentDate = new Date();
+        const dateStr = currentDate.toISOString().split('T')[0]; // Format the date as YYYY-MM-DD
+        const filename = `Solar Module Analyser_Data_${dateStr}.csv`; // Append the date to the filename
         const csv = Papa.unparse(alldata);
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -119,8 +169,10 @@ function Dashboard({ handlelogout }) {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    }
+    };
 
+
+//receive the responce: 
 
     const receiveresponse = async () => {
         const loader = document.getElementById("loader");
@@ -128,21 +180,19 @@ function Dashboard({ handlelogout }) {
         const response = await fetch('http://localhost:4000/api/data')
         const data = await response.json();
         setalldata(data);
-
         const current1 = data.map(item => item.Current);
         setcurrent(current1);
-
         const voltage1 = data.map(item => item.Voltage);
         setvoltage(voltage1)
-
         const power2 = data.map(item => item.Power);
         setpower1(power2);
-
         loader.style.display = "none";
         booleanseconds.current = false;
-        calculatevalues(current1,voltage1,power2);
+        calculatevalues(current1, voltage1, power2);
         setgraphdata(data);
     }
+
+//graph data 
 
     const setgraphdata = (data) => {
         setData({
@@ -174,13 +224,13 @@ function Dashboard({ handlelogout }) {
 
     useEffect(() => {
         socket.on('message-to-react', (socketdata) => {
-            console.log(socketdata);
         });
         return () => {
             socket.off('message-to-react');
         };
     }, []);
 
+//Graph scales or axis x,y,y1 axis:
 
     const options = {
         plugins: {
@@ -289,40 +339,39 @@ function Dashboard({ handlelogout }) {
         },
     };
 
-  
- 
 
-function saveimage() {
- 
-  const graphElement = document.getElementById('your-graph-id'); 
+// save the graph as image
 
-  
-  html2canvas(graphElement)
-    .then((canvas) => {
-      const imageDataURL = canvas.toDataURL('image/png');
-
-      // Create an anchor element to trigger the download
-      const downloadLink = document.createElement('a');
-      downloadLink.href = imageDataURL;
-      downloadLink.download = 'graph.png';
-
-      // Trigger the download
-      downloadLink.click();
-    })
-    .catch((error) => {
-      console.error('Error saving image:', error);
-    });
-}
+    function saveImageWithTimestamp() {
+        const graphElement = document.getElementById('your-graph-id');
+        html2canvas(graphElement)
+            .then((canvas) => {
+                const imageDataURL = canvas.toDataURL('image/png'); 
+                const currentDate = new Date();
+                const dateWithoutTime = currentDate.toISOString().split('T')[0];
+                const fileName = `Solar Module Analyser_Graph_${dateWithoutTime}.png`;
+                const downloadLink = document.createElement('a');
+                downloadLink.href = imageDataURL;
+                downloadLink.download = fileName;
+                downloadLink.click();
+            })
+            .catch((error) => {
+                console.error('Error saving image:', error);
+            });
+    }
 
 
-
-
+//user interface view page
     return (
         <div className="boddy">
+            <div id="loader" className="loader">
+                <div className="loading"></div>
+            </div>
 
             <div className="heading_1">
                 <h5>Welcome To</h5>
             </div>
+            
             <div className="heading_2">
                 <h1>Solar Module Analyser</h1>
             </div>
@@ -331,173 +380,92 @@ function saveimage() {
                 <img src={myImage} alt="My Image" />
             </div>
 
-
-
-            <div className="width-100">
-                <div className="nav-bar">
-                    <ul>
-                        <li
-                            style={{ cursor: "pointer" }}
-                            className={`list ${activeListItem === 0 ? 'active' : ''}`}
-                            onClick={() => handleListItemClick(0)}
-                        >
-                            <a href="#card_id"><span className="icons"><i className="fa fa-home"></i></span>
-                                <span className="content">Home</span></a>
-                        </li>
-                        <li
-                            style={{ cursor: "pointer" }}
-                            className={`list ${activeListItem === 1 ? 'active' : ''}`}
-                            onClick={() => handleListItemClick(1)}
-                        >
-                            <a href="#graph"><span className="icons"><i className="fa fa-line-chart"></i></span>
-                                <span className="content">Graph</span></a>
-
-                        </li>
-                        <li
-                            style={{ cursor: "pointer" }}
-                            className={`list ${activeListItem === 2 ? 'active' : ''}`}
-                            onClick={() => handleListItemClick(2)}
-                        >
-                            <a href="#Calculation"><span className="icons"><i className="fa fa-calculator"></i></span>
-                                <span className="content">Calculation</span></a>
-
-                        </li>
-                        <li
-                            style={{ cursor: "pointer" }}
-                            className={`list ${activeListItem === 3 ? 'active' : ''}`}
-                            onClick={handlelogout}
-                        >
-
-                            <span className="icons"><i className="fa fa-sign-out"></i></span>
-                            <span className="content" >Logout</span>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-
-
-
-
-            <div class="card" id="card_id">
-                <div class="container">
-                    <h1 className="text_card">About Us</h1>
-                    <br /><br />
-                    <p class="para">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Our Solar Module Analyzer project is pivotal for efficient solar energy utilization. We collect real-time data from solar panels and graphically display power and current trends. These graphs offer clear insights into panel performance over time, aiding in performance evaluation and anomaly detection. Moreover, our project includes complex calculations to assess efficiency and predict maintenance needs. This comprehensive tool empowers us to optimize energy production and ensure the sustainability of our solar systems."
-                    </p>
-                </div>
-            </div>
-
-            <br /><br /><br /><br /><br />
-
             <div className="graphs" id="graph">
-
-                <h1 className="text_card">Graph</h1>
-
-                <div id="loader" className="loader">
-                    <div className="loading"></div>
-                </div>
-
-
-                <div className="content">
-                    <div className="graph">
+                <div className="content d-flex">
+                    <div className="graph" id="your-graph-id">
+                        <h1 className="text_card">Graph</h1>
                         <Line data={datas} options={options} />
                     </div>
+
+                    <div className="graph">
+                        <h1 className="text_card">Calculation</h1>
+
+                        <div className="inner-card">
+                            <h2>OCV</h2>
+                            <div className="value">{ocv}</div>
+                            <div className="symbols">V</div>
+                        </div>
+
+                        <div className="inner-card">
+                            <h2>SCC</h2>
+                            <div className="value">{scc}</div>
+                            <div className="symbols">V</div>
+                        </div>
+
+                        <div className="inner-card">
+                            <h2>Pmax</h2>
+                            <div className="value">{pmax}</div>
+                            <div className="symbols">W</div>
+                        </div>
+
+                        <div className="inner-card">
+                            <h2>Vmaxp</h2>
+                            <div className="value">{vmaxp}</div>
+                            <div className="symbols">V</div>
+                        </div>
+
+                        <div className="inner-card">
+                            <h2>Imaxp</h2>
+                            <div className="value">{imaxp}</div>
+                            <div className="symbols">mA</div>
+                        </div>
+
+                        <div className="inner-card">
+                            <h2>Efficiency</h2>
+                            <div className="value">{eff}</div>
+                            <div className="symbols">%</div>
+                        </div>
+
+                        <div className="inner-card">
+                            <h2>Fill Factor</h2>
+                            <div className="value">{isNaN(ff) ? "" : ff}</div>
+                        </div>
+
+                    </div>
                 </div>
-                <br /><br /><br />
+                <br />
                 <div className="buttons1">
                     <div className="sec-bar">
-                        <button className="btn-loc start" onClick={sendresponse}>Start</button>
+                        <input type="number" placeholder="Area value" value={var1} onChange={handle_var1}/>
+                        <input type="number" placeholder="Irradiance"  value={var2} onChange={handle_var2}/>
+                        <button className={`btn-loc start ${var1 && var2 ? '' : 'disabled'}`} onClick={sendresponse} disabled={!(var1 && var2)}>
+                            Start
+                        </button>
                     </div>
+
                     <div className="sec-bar">
                         <button className="btn-loc start btn btn-primary" onClick={exportData}>Export</button>
                     </div>
+
                     <div className="sec-bar" style={{ whiteSpace: 'nowrap' }}>
-                        <button className="btn-loc start btn btn-warning" onClick={saveimage}>Save graph</button>
+                        <button className="btn-loc start btn btn-warning" onClick={saveImageWithTimestamp}>Save graph</button>
                     </div>
 
-
                 </div>
+
+            </div>
+            <br />
+            <div class="floating-button">
+                <button onClick={handlelogout} style={{ borderRadius: "50px" }}>Log out</button>
             </div>
 
-            <br /><br /><br /><br /><br /><br />
-
-            <div className="Calculation" id="Calculation">
-                <h1 className="text_card">Calculation</h1>
-
-                <div className="content">
-                    <div className="values">
-                        <div className="card clue">
-                            <h2>OCV</h2>
-                            <div className="inner-card">
-                                <div className="value">{ocv}</div>
-                                <div className="symbols">V</div>
-                            </div>
-                        </div>
-                        <div className="card clue">
-                            <h2>SCC</h2>
-                            <div className="inner-card">
-                                <div className="value">{scc}</div>
-                                <div className="symbols">V</div>
-                            </div>
-                        </div>
-                        {/* <div className="card clue">
-                            <h2>Ishort</h2>
-                            <div className="inner-card">
-                                <div className="value">733.0</div>
-                                <div className="symbols">mA</div>
-                            </div>
-                        </div> */}
-                        <div className="card clue">
-                            <h2>Pmax</h2>
-                            <div className="inner-card">
-                                <div className="value">{pmax}</div>
-                                <div className="symbols">W</div>
-                            </div>
-                        </div>
-                        <div className="card clue">
-                            <h2>Vmaxp</h2>
-                            <div className="inner-card">
-                                <div className="value">{vmaxp}</div>
-                                <div className="symbols">V</div>
-                            </div>
-
-                        </div>
-                        <div className="card clue">
-                            <h2>Imaxp</h2>
-                            <div className="inner-card">
-                                <div className="value">{imaxp}</div>
-                                <div className="symbols">mA</div>
-                            </div>
-
-                        </div>
-                        <div className="card clue">
-                            <h2>Efficiency (EFF)</h2>
-                            <div className="inner-card">
-                                <div className="inner-card">
-                                    <div className="value">{eff}</div>
-                                    <div className="symbols">%</div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="card clue">
-                            <h2>Fill Factor</h2>
-                            <div className="inner-card">
-                                <div className="value">{ff}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div >
-
+{/* footer */}
             <footer>
                 <div className="footer-content">
                     <p>&copy; 2023 Quantanic Techsherv Pvt Ltd. All rights reserved.</p>
                 </div>
             </footer>
+
         </div >
     )
 }

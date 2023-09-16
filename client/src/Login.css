@@ -1,54 +1,87 @@
 /* Login.css */
 
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 300px;
+}
+
+.login-box h2 {
+  margin-top: 0;
+}
+
+.login-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.login-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
   .login-box {
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 300px;
+    width: 80%;
   }
-  
-  .login-box h2 {
-    margin-top: 0;
-  }
-  
-  .login-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .login-btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .login-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  .error-message {
-    color: red;
-    margin-top: 10px;
-  }
-  
-  @media (max-width: 768px) {
-    .login-box {
-      width: 80%;
-    }
-  }
-  
+}
+
+/* login page */
+
+.log_backimage1 {
+  height: 100px;
+  width: 100px;
+}
+
+
+
+/* styles.css */
+
+
+#bgimage {
+  background-image: url('./logo/background_solar.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height:100vh; /* Set the height to 100% of the viewport height */
+  overflow: hidden;
+}
+.disabled{
+  background-color: rgba(0, 128, 0, 0.636);
+  cursor: not-allowed;
+}
+.inputs{
+  display: flex;
+}
+.sec-bar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
